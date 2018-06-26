@@ -1,0 +1,31 @@
+{
+    "author": "e.kazuma@gmail.com",
+    "dependencies": {},
+    "keywords": [],
+    "name": "cameratopebble",
+    "pebble": {
+        "displayName": "CameraToPebble",
+        "enableMultiJS": true,
+        "messageKeys": {
+            "img0": 2,
+            "img1": 3,
+            "img2": 4,
+            "img3": 5,
+            "message": 1,
+            "status": 0
+        },
+        "projectType": "native",
+        "resources": {
+            "media": []
+        },
+        "sdkVersion": "3",
+        "targetPlatforms": [
+            "basalt"
+        ],
+        "uuid": "b70d9524-18a6-405a-a2e7-a2a2eb3c5643",
+        "watchapp": {
+            "watchface": false
+        }
+    },
+    "version": "1.0.0"
+}
