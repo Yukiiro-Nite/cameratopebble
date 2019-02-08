@@ -1,0 +1,62 @@
+<html>
+  <head>
+    <title>Camera Client</title>
+  </head>
+  <body>
+    <video autoplay="true" id="cameraVideo"></video>
+    <canvas id="camera"></canvas>
+    <canvas id="screen"></canvas>
+    <script>
+      var screenSize = {width:144, height:168};
+
+      var screen = document.getElementById("screen");
+      var screenContext = screen.getContext("2d");
+
+      var video = document.getElementById("cameraVideo");
+
+      navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia || navigator.oGetUserMedia;
+
+      if (navigator.getUserMedia) {
+        navigator.getUserMedia({video: true}, handleVideo, videoError);
+      }
+
+      function handleVideo(stream) {
+        console.log(stream)
+        video.srcObject = stream
+      }
+
+      function videoError(e) {
+        console.log('There was a problem getting the webcam stream: ', e)
+      }
+
+      video.addEventListener('play', function(){
+        draw(video,screenContext,screenSize.width,screenSize.height);
+      },false);
+
+      function draw(v,c,w,h) {
+        if(v.paused || v.ended) return false;
+        c.drawImage(v,0,0,w,h);
+        sendImage();
+        // one could increase this number to make framerate better.
+        setTimeout(draw,500,v,c,w,h);
+      }
+
+      function sendImage(){
+        var imgData = screenContext.getImageData(0,0,screenSize.width,screenSize.height).data;
+        var data = [];
+        for(var i in imgData){
+          if (imgData.hasOwnProperty(i)) {
+            data.push(imgData[i]);
+          }
+        }
+        fetch('/img', {
+          method: "POST",
+          headers:{
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        })
+      }
+    </script>
+  </body>
+</html>
